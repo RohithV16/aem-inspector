@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "AEM Component Inspector",
+  "version": "1.0.0",
+  "description": "Hover over AEM components to inspect resource types, policies, and editable configs instantly.",
+
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+
+  "host_permissions": [
+    "*://*.adobeaemcloud.com/*",
+    "*://*.aem.page/*",
+    "*://localhost/*",
+    "*://127.0.0.1/*"
+  ],
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "AEM Component Inspector"
+  },
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.adobeaemcloud.com/*",
+        "*://*.aem.page/*",
+        "*://localhost/*",
+        "*://127.0.0.1/*"
+      ],
+      "js": ["content.js"],
+      "css": ["tooltip.css"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
