@@ -13,9 +13,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.type === 'GET_SETTINGS') {
-    chrome.storage.sync.get(['enabled', 'showJSON', 'autoFetch'], (result) => {
+    chrome.storage.sync.get(['enabled', 'theme', 'showJSON', 'autoFetch'], (result) => {
       sendResponse({
-        enabled: result.enabled !== false, // default true
+        enabled: result.enabled !== false,
+        theme: result.theme || 'dark',
         showJSON: result.showJSON !== false,
         autoFetch: result.autoFetch !== false
       });

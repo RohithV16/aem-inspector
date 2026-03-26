@@ -21,6 +21,19 @@
     --muted: #374151;
   }
 
+  [data-theme="light"] {
+    --bg: #ffffff;
+    --panel: #f8fafc;
+    --border: #e2e8f0;
+    --accent: #3b82f6;
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --text: #1e293b;
+    --sub: #64748b;
+    --muted: #cbd5e1;
+  }
+
   body {
     width: 300px;
     background: var(--bg);
@@ -80,6 +93,19 @@
     background: var(--border);
     padding: 3px 7px;
     border-radius: 4px;
+  }
+
+  .theme-toggle {
+    background: var(--border);
+    border: 1px solid var(--muted);
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .theme-toggle:hover {
+    background: var(--muted);
   }
 
   /* Status Card */
@@ -347,6 +373,7 @@
     </div>
   </div>
   <div class="version-badge">v1.0.0</div>
+  <button class="theme-toggle" id="theme-toggle" title="Toggle theme">🌙</button>
 </div>
 
 <!-- Status Toggle -->

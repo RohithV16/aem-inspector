@@ -1,21 +1,42 @@
 /* tooltip.css — Injected into AEM Author pages */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@400;600;700&display=swap');
 
+/* ── Light Theme Variables ─────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --aemi-bg: #ffffff;
+  --aemi-panel: #f8fafc;
+  --aemi-border: #e2e8f0;
+  --aemi-accent: #3b82f6;
+  --aemi-green: #10b981;
+  --aemi-yellow: #f59e0b;
+  --aemi-red: #ef4444;
+  --aemi-text: #1e293b;
+  --aemi-sub: #64748b;
+  --aemi-muted: #cbd5e1;
+  --aemi-deep-bg: #f1f5f9;
+}
+
 /* ── Component Highlight ───────────────────────────────────────────────────── */
 .aemi-highlighted {
   outline: 2px solid #4f8ef7 !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 0 4px rgba(79, 142, 247, 0.12) !important;
   transition: outline 0.1s, box-shadow 0.1s !important;
+  animation: aemi-pulse 2s ease-in-out infinite !important;
+}
+
+@keyframes aemi-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(79, 142, 247, 0.12) !important; }
+  50% { box-shadow: 0 0 0 8px rgba(79, 142, 247, 0.06), 0 0 20px rgba(79, 142, 247, 0.1) !important; }
 }
 
 /* ── Tooltip Container ─────────────────────────────────────────────────────── */
 #aem-inspector-tooltip {
   position: fixed !important;
   z-index: 2147483647 !important;
-  width: 340px !important;
-  background: #0d0f14 !important;
-  border: 1px solid #4f8ef7 !important;
+  width: 360px !important;
+  background: var(--aemi-bg, #0d0f14) !important;
+  border: 1px solid var(--aemi-accent, #4f8ef7) !important;
   border-radius: 12px !important;
   box-shadow:
     0 24px 60px rgba(0, 0, 0, 0.8),
@@ -23,7 +44,7 @@
     0 0 40px rgba(79, 142, 247, 0.06) !important;
   font-family: 'JetBrains Mono', 'Courier New', monospace !important;
   font-size: 11px !important;
-  color: #e2e8f0 !important;
+  color: var(--aemi-text, #e2e8f0) !important;
   overflow: hidden !important;
   opacity: 0 !important;
   transform: scale(0.94) translateY(6px) !important;
@@ -35,18 +56,90 @@
   box-sizing: border-box !important;
 }
 
+/* ── Resize Handle ────────────────────────────────────────────────────────── */
+.aemi-resize-handle {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 6px !important;
+  height: 100% !important;
+  cursor: col-resize !important;
+  z-index: 1 !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s, background 0.2s !important;
+}
+
+.aemi-resize-handle:hover,
+.aemi-resize-handle.aemi--resizing {
+  background: rgba(79, 142, 247, 0.3) !important;
+  opacity: 1 !important;
+}
+
 #aem-inspector-tooltip.aemi--visible {
   opacity: 1 !important;
   transform: scale(1) translateY(0) !important;
   pointer-events: all !important;
 }
 
-#aem-inspector-tooltip.aemi--pinned {
-  border-color: #f39c12 !important;
+/* ── Sidebar Mode ─────────────────────────────────────────────────────────── */
+#aem-inspector-tooltip.aemi--sidebar {
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 550px !important;
+  max-width: 60vw !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  border-radius: 0 !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  transform: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border-color: #4f8ef7 !important;
+}
+
+#aem-inspector-tooltip.aemi--sidebar-right {
+  right: 0 !important;
+  left: auto !important;
+  border-left: 1px solid #4f8ef7 !important;
   box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.8),
-    0 0 0 1px rgba(243, 156, 18, 0.2),
-    0 0 40px rgba(243, 156, 18, 0.06) !important;
+    -8px 0 40px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(79, 142, 247, 0.1) !important;
+}
+
+#aem-inspector-tooltip.aemi--sidebar-left {
+  left: 0 !important;
+  right: auto !important;
+  border-right: 1px solid #4f8ef7 !important;
+  border-left: none !important;
+  box-shadow:
+    8px 0 40px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(79, 142, 247, 0.1) !important;
+}
+
+#aem-inspector-tooltip.aemi--sidebar .aemi-body {
+  flex: 1 !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+}
+
+#aem-inspector-tooltip.aemi--sidebar .aemi-header {
+  cursor: default !important;
+  flex-shrink: 0 !important;
+}
+
+#aem-inspector-tooltip.aemi--sidebar .aemi-actions,
+#aem-inspector-tooltip.aemi--sidebar .aemi-footer {
+  flex-shrink: 0 !important;
+}
+
+#aem-inspector-tooltip.aemi--sidebar .aemi-key {
+  min-width: 140px !important;
+}
+
+#aem-inspector-tooltip.aemi--sidebar .aemi-resize-handle {
+  display: none !important;
 }
 
 /* ── Header ────────────────────────────────────────────────────────────────── */
@@ -54,16 +147,35 @@
   background: linear-gradient(135deg, #111827, #0f1420) !important;
   padding: 11px 13px !important;
   display: flex !important;
-  align-items: center !important;
+  align-items: flex-start !important;
   justify-content: space-between !important;
-  border-bottom: 1px solid #1e2230 !important;
+  border-bottom: 1px solid var(--aemi-border, #1e2230) !important;
   box-sizing: border-box !important;
+  cursor: grab !important;
+}
+
+.aemi-header:active {
+  cursor: grabbing !important;
+}
+
+#aem-inspector-tooltip.aemi--sidebar .aemi-header {
+  cursor: default !important;
+}
+
+[data-theme="light"] .aemi-header {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0) !important;
 }
 
 .aemi-title {
   display: flex !important;
-  align-items: center !important;
+  align-items: flex-start !important;
   gap: 8px !important;
+}
+
+.aemi-title-text {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
 }
 
 .aemi-icon {
@@ -82,35 +194,116 @@
   font-family: 'Sora', sans-serif !important;
   font-weight: 700 !important;
   font-size: 13px !important;
-  color: #ffffff !important;
+  color: var(--aemi-text, #ffffff) !important;
   letter-spacing: -0.01em !important;
 }
 
 .aemi-header-actions {
   display: flex !important;
-  gap: 5px !important;
+  gap: 4px !important;
 }
 
-.aemi-pin,
+/* ── Breadcrumb ───────────────────────────────────────────────────────────── */
+.aemi-breadcrumb {
+  font-size: 8px !important;
+  color: var(--aemi-sub, #4b5563) !important;
+  letter-spacing: 0.02em !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  line-height: 1.4 !important;
+}
+
+.aemi-breadcrumb-seg {
+  cursor: pointer !important;
+  transition: color 0.1s !important;
+}
+
+.aemi-breadcrumb-seg:hover {
+  color: var(--aemi-accent, #4f8ef7) !important;
+}
+
+.aemi-breadcrumb-sep {
+  color: var(--aemi-muted, #374151) !important;
+}
+
+/* ── Usage Badge ──────────────────────────────────────────────────────────── */
+.aemi-usage-badge {
+  font-size: 8px !important;
+  color: #f39c12 !important;
+  background: rgba(243, 156, 18, 0.15) !important;
+  border: 1px solid rgba(243, 156, 18, 0.3) !important;
+  padding: 1px 5px !important;
+  border-radius: 3px !important;
+  margin-left: 6px !important;
+}
+
+/* ── Lock Status ──────────────────────────────────────────────────────────── */
+.aemi-lock-status {
+  font-size: 9px !important;
+  color: var(--aemi-sub, #64748b) !important;
+  margin-top: 4px !important;
+  display: none !important;
+}
+
+.aemi-lock-status--locked {
+  color: #ef4444 !important;
+}
+
+/* ── Sidebar Toggle Buttons ──────────────────────────────────────────────── */
+.aemi-sidebar-toggle {
+  width: 20px !important;
+  height: 20px !important;
+  background: var(--aemi-panel, #1e2230) !important;
+  border: 1px solid var(--aemi-border, #2a2d35) !important;
+  border-radius: 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 8px !important;
+  cursor: pointer !important;
+  color: var(--aemi-sub, #94a3b8) !important;
+  padding: 0 !important;
+  transition: background 0.15s, color 0.15s !important;
+  line-height: 1 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.aemi-sidebar-toggle.aemi--visible {
+  visibility: visible !important;
+  pointer-events: all !important;
+}
+
+.aemi-sidebar-toggle:hover {
+  background: #2a3045 !important;
+  color: #fff !important;
+}
+
+.aemi-sidebar-toggle.aemi--active {
+  background: rgba(79, 142, 247, 0.2) !important;
+  border-color: #4f8ef7 !important;
+  color: #4f8ef7 !important;
+}
+
+/* ── Close Button ─────────────────────────────────────────────────────────── */
 .aemi-close {
   width: 20px !important;
   height: 20px !important;
-  background: #1e2230 !important;
-  border: 1px solid #2a2d35 !important;
+  background: var(--aemi-panel, #1e2230) !important;
+  border: 1px solid var(--aemi-border, #2a2d35) !important;
   border-radius: 4px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   font-size: 10px !important;
   cursor: pointer !important;
-  color: #94a3b8 !important;
+  color: var(--aemi-sub, #94a3b8) !important;
   padding: 0 !important;
   transition: background 0.15s, color 0.15s !important;
   line-height: 1 !important;
 }
 
-.aemi-pin { opacity: 0.5 !important; }
-.aemi-pin:hover, .aemi-close:hover {
+.aemi-close:hover {
   background: #2a3045 !important;
   color: #fff !important;
 }
@@ -127,25 +320,41 @@
 .aemi-body::-webkit-scrollbar-track { background: transparent !important; }
 .aemi-body::-webkit-scrollbar-thumb { background: #2a2d35 !important; border-radius: 2px !important; }
 
-/* ── Sections ──────────────────────────────────────────────────────────────── */
+/* ── Collapsible Sections ────────────────────────────────────────────────── */
 .aemi-section {
-  padding: 9px 13px !important;
-  border-bottom: 1px solid #13151c !important;
+  border-bottom: 1px solid var(--aemi-border, #13151c) !important;
   box-sizing: border-box !important;
 }
 
 .aemi-section:last-child { border-bottom: none !important; }
+
+.aemi-section-header {
+  padding: 9px 13px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  cursor: pointer !important;
+  transition: background 0.1s !important;
+}
+
+.aemi-section-header:hover {
+  background: rgba(79, 142, 247, 0.03) !important;
+}
 
 .aemi-section-label {
   font-size: 9px !important;
   letter-spacing: 0.14em !important;
   text-transform: uppercase !important;
   color: #4b5563 !important;
-  margin-bottom: 7px !important;
   display: flex !important;
   align-items: center !important;
   gap: 6px !important;
   font-family: 'JetBrains Mono', monospace !important;
+  margin-bottom: 0 !important;
+}
+
+.aemi-section-label .aemi-crxde-link {
+  margin-left: auto !important;
 }
 
 .aemi-section-label::after {
@@ -153,6 +362,26 @@
   flex: 1 !important;
   height: 1px !important;
   background: #1e2230 !important;
+}
+
+.aemi-section-arrow {
+  font-size: 9px !important;
+  color: var(--aemi-sub, #4b5563) !important;
+  transition: transform 0.15s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.aemi-section-arrow.open {
+  transform: rotate(90deg) !important;
+}
+
+.aemi-section-content {
+  padding: 0 13px 9px !important;
+  display: none !important;
+}
+
+.aemi-section--expanded .aemi-section-content {
+  display: block !important;
 }
 
 /* ── Resource Type ─────────────────────────────────────────────────────────── */
@@ -168,10 +397,20 @@
   color: #7cb9ff !important;
   font-size: 10px !important;
   word-break: break-all !important;
-  cursor: pointer !important;
-  text-decoration: underline !important;
-  text-underline-offset: 2px !important;
-  text-decoration-style: dotted !important;
+}
+
+.aemi-crxde-link {
+  color: var(--aemi-sub, #64748b) !important;
+  text-decoration: none !important;
+  font-size: 10px !important;
+  margin-left: 6px !important;
+  opacity: 0.7 !important;
+  transition: opacity 0.15s !important;
+}
+
+.aemi-crxde-link:hover {
+  opacity: 1 !important;
+  color: var(--aemi-accent, #4f8ef7) !important;
 }
 
 /* ── Property Rows ─────────────────────────────────────────────────────────── */
@@ -186,16 +425,27 @@
 .aemi-prop-row:last-child { margin-bottom: 0 !important; }
 
 .aemi-key {
-  color: #64748b !important;
+  color: var(--aemi-sub, #64748b) !important;
   min-width: 95px !important;
   font-size: 10px !important;
   flex-shrink: 0 !important;
 }
 
 .aemi-val {
-  color: #cbd5e1 !important;
+  color: var(--aemi-text, #cbd5e1) !important;
   font-size: 10px !important;
   word-break: break-all !important;
+}
+
+.aemi-val--copyable {
+  cursor: pointer !important;
+  padding: 1px 3px !important;
+  border-radius: 3px !important;
+  transition: background 0.1s !important;
+}
+
+.aemi-val--copyable:hover {
+  background: rgba(79, 142, 247, 0.1) !important;
 }
 
 .aemi-val--path {
@@ -246,9 +496,13 @@
 }
 
 .aemi-tree-key {
-  color: #64748b !important;
+  color: var(--aemi-sub, #64748b) !important;
   font-size: 10px !important;
   flex-shrink: 0 !important;
+}
+
+.aemi-tree-key:hover {
+  color: var(--aemi-accent, #4f8ef7) !important;
 }
 
 .aemi-tree-badge {
@@ -342,18 +596,18 @@
 /* ── Actions ───────────────────────────────────────────────────────────────── */
 .aemi-actions {
   padding: 9px 13px !important;
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
   gap: 5px !important;
-  background: #090b0f !important;
-  border-top: 1px solid #1e2230 !important;
+  background: var(--aemi-deep-bg, #090b0f) !important;
+  border-top: 1px solid var(--aemi-border, #1e2230) !important;
   box-sizing: border-box !important;
 }
 
 .aemi-btn {
-  background: #13161e !important;
-  border: 1px solid #1e2230 !important;
-  color: #64748b !important;
+  background: var(--aemi-panel, #13161e) !important;
+  border: 1px solid var(--aemi-border, #1e2230) !important;
+  color: var(--aemi-sub, #64748b) !important;
   padding: 6px 8px !important;
   border-radius: 6px !important;
   font-family: 'JetBrains Mono', monospace !important;
@@ -381,14 +635,308 @@
   color: #4f8ef7 !important;
 }
 
+.aemi-btn--pin {
+  background: rgba(243, 156, 18, 0.1) !important;
+  border-color: rgba(243, 156, 18, 0.35) !important;
+  color: #f39c12 !important;
+  flex: 1 1 100% !important;
+}
+
+.aemi-btn--pin:hover {
+  background: rgba(243, 156, 18, 0.2) !important;
+  border-color: #f39c12 !important;
+  color: #f39c12 !important;
+}
+
+.aemi-btn--unpin {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  color: #ef4444 !important;
+  flex: 1 1 100% !important;
+}
+
+.aemi-btn--unpin:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+#aem-inspector-tooltip.aemi--sidebar .aemi-btn--pin {
+  display: none !important;
+}
+
 /* ── Footer ────────────────────────────────────────────────────────────────── */
 .aemi-footer {
   padding: 5px 13px !important;
   display: flex !important;
   justify-content: space-between !important;
   font-size: 8px !important;
-  color: #1e2230 !important;
-  background: #090b0f !important;
+  color: var(--aemi-sub, #1e2230) !important;
+  background: var(--aemi-deep-bg, #090b0f) !important;
   letter-spacing: 0.06em !important;
   box-sizing: border-box !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* ── NEW FEATURES ─────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Toast Notifications ──────────────────────────────────────────────────── */
+#aemi-toast-container {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  flex-direction: column-reverse !important;
+  gap: 8px !important;
+  pointer-events: none !important;
+}
+
+.aemi-toast {
+  padding: 8px 14px !important;
+  border-radius: 8px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px !important;
+  pointer-events: all !important;
+  opacity: 0 !important;
+  transform: translateY(10px) !important;
+  transition: opacity 0.25s, transform 0.25s !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+  max-width: 300px !important;
+  word-break: break-all !important;
+}
+
+.aemi-toast--visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.aemi-toast--success {
+  background: rgba(16, 185, 129, 0.95) !important;
+  color: #fff !important;
+  border: 1px solid rgba(16, 185, 129, 0.5) !important;
+}
+
+.aemi-toast--error {
+  background: rgba(239, 68, 68, 0.95) !important;
+  color: #fff !important;
+  border: 1px solid rgba(239, 68, 68, 0.5) !important;
+}
+
+.aemi-toast--info {
+  background: rgba(79, 142, 247, 0.95) !important;
+  color: #fff !important;
+  border: 1px solid rgba(79, 142, 247, 0.5) !important;
+}
+
+/* ── Search Modal ─────────────────────────────────────────────────────────── */
+#aemi-search-modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 2147483647 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+#aemi-search-modal.aemi--search-open {
+  visibility: visible !important;
+  pointer-events: all !important;
+}
+
+.aemi-search-overlay {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.aemi-search-box {
+  position: relative !important;
+  width: 500px !important;
+  max-width: 90vw !important;
+  margin: 15vh auto 0 !important;
+  background: var(--aemi-bg, #0d0f14) !important;
+  border: 1px solid var(--aemi-accent, #4f8ef7) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important;
+  overflow: hidden !important;
+  z-index: 1 !important;
+}
+
+.aemi-search-input {
+  width: 100% !important;
+  padding: 14px 16px !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--aemi-border, #1e2230) !important;
+  color: var(--aemi-text, #e2e8f0) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+}
+
+.aemi-search-input::placeholder {
+  color: var(--aemi-sub, #4b5563) !important;
+}
+
+.aemi-search-results {
+  max-height: 400px !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #2a2d35 transparent !important;
+}
+
+.aemi-search-result {
+  padding: 10px 16px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  border-bottom: 1px solid rgba(30, 34, 48, 0.5) !important;
+  transition: background 0.1s !important;
+}
+
+.aemi-search-result:hover,
+.aemi-search-result--active {
+  background: rgba(79, 142, 247, 0.08) !important;
+}
+
+.aemi-search-result-name {
+  color: var(--aemi-text, #e2e8f0) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+.aemi-search-result-type {
+  color: var(--aemi-sub, #4b5563) !important;
+  font-size: 9px !important;
+  max-width: 200px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.aemi-search-empty {
+  padding: 20px !important;
+  text-align: center !important;
+  color: var(--aemi-sub, #4b5563) !important;
+  font-size: 11px !important;
+}
+
+.aemi-search-hint {
+  padding: 8px 16px !important;
+  display: flex !important;
+  gap: 16px !important;
+  font-size: 9px !important;
+  color: var(--aemi-sub, #4b5563) !important;
+  border-top: 1px solid var(--aemi-border, #1e2230) !important;
+}
+
+/* ── Onboarding ───────────────────────────────────────────────────────────── */
+#aemi-onboarding {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.aemi-onboarding-overlay {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+.aemi-onboarding-card {
+  position: relative !important;
+  background: var(--aemi-bg, #0d0f14) !important;
+  border: 1px solid var(--aemi-accent, #4f8ef7) !important;
+  border-radius: 16px !important;
+  padding: 32px !important;
+  max-width: 400px !important;
+  text-align: center !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6) !important;
+}
+
+.aemi-onboarding-icon {
+  width: 48px !important;
+  height: 48px !important;
+  background: linear-gradient(135deg, #4f8ef7, #7cb9ff) !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 24px !important;
+  margin: 0 auto 16px !important;
+}
+
+.aemi-onboarding-title {
+  font-family: 'Sora', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--aemi-text, #ffffff) !important;
+  margin-bottom: 20px !important;
+}
+
+.aemi-onboarding-steps {
+  text-align: left !important;
+  margin-bottom: 24px !important;
+}
+
+.aemi-onboarding-step {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 8px 0 !important;
+  font-size: 12px !important;
+  color: var(--aemi-sub, #94a3b8) !important;
+}
+
+.aemi-onboarding-step-num {
+  width: 22px !important;
+  height: 22px !important;
+  background: rgba(79, 142, 247, 0.15) !important;
+  border: 1px solid rgba(79, 142, 247, 0.3) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  color: #4f8ef7 !important;
+  flex-shrink: 0 !important;
+}
+
+.aemi-onboarding-btn {
+  background: rgba(79, 142, 247, 0.15) !important;
+  border: 1px solid rgba(79, 142, 247, 0.4) !important;
+  color: #4f8ef7 !important;
+  padding: 10px 32px !important;
+  border-radius: 8px !important;
+  font-family: 'Sora', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.15s !important;
+}
+
+.aemi-onboarding-btn:hover {
+  background: rgba(79, 142, 247, 0.25) !important;
+  border-color: #4f8ef7 !important;
 }

@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ── Load settings ─────────────────────────────────────────────────────────
-  chrome.storage.sync.get(['enabled', 'autoFetch', 'showJSON', 'showHighlight'], (settings) => {
+  chrome.storage.sync.get(['enabled', 'autoFetch', 'showJSON', 'showHighlight', 'theme'], (settings) => {
     const enabled = settings.enabled !== false;
     const autoFetch = settings.autoFetch !== false;
     const showJSON = settings.showJSON !== false;
@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     setMiniToggle('toggle-fetch', autoFetch);
     setMiniToggle('toggle-json', showJSON);
     setMiniToggle('toggle-highlight', showHighlight);
+
+    const savedTheme = settings.theme || 'dark';
+    setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
   });
 
   // ── Detect current tab environment ────────────────────────────────────────
@@ -73,6 +77,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update badge
     chrome.runtime.sendMessage({ type: 'TOGGLE_INSPECTOR', enabled: newState });
   });
+
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    chrome.storage.sync.set({ theme: newTheme });
+    
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+          type: 'THEME_CHANGED',
+          theme: newTheme
+        }).catch(() => {});
+      }
+    });
+  });
+
+  function setTheme(theme) {
+    const btn = document.getElementById('theme-toggle');
+    btn.textContent = theme === 'dark' ? '🌙' : '☀️';
+    btn.title = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+  }
 
   // ── Mini Toggles ──────────────────────────────────────────────────────────
   document.getElementById('toggle-fetch').addEventListener('click', function () {
